@@ -20,45 +20,19 @@
     <script>
         document.getElementById("xssForm").addEventListener("submit", function(e) {
             e.preventDefault();
-
             const input = document.getElementById("inputField").value;
-
-            // Reflect the input into the page (vulnerable part)
+            console.log("User input:", input);
             document.getElementById("output").innerHTML = input;
-YPE html>
-<html>
-<head>
-    <title>Reflected XSS</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
-        h1 { color:#444; }
-        input { padding: 8px; margin-right: 10px; width: 300px; }
-        #output { margin-top: 20px; font-size: 18px; }
-    </style>
-</head>
-<body>
-    <h1>Reflected XSS</h1>
-    <form id="xssForm">
-        <input type="text" id="inputField" placeholder="<script>window.xssTriggered=true</script>"/>
-        <input type="submit" value="Submit" />
-    </form>
-    <p id="output"></p>
 
-    <script>
-        document.getElementById("xssForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            const input = document.getElementById("inputField").value;
-
-            // Reflect the input into the page (vulnerable part)
-            document.getElementById("output").innerHTML = input;
-            // After rendering the input, check if it triggers the flag
             setTimeout(() => {
                 if (window.xssTriggered) {
                     alert("THM{Reflected_XSS_Flag}");
+                } else {
+                    console.log("No flag triggered.");
                 }
-            }, 100); // short delay to allow script execution
+            }, 100);
         });
     </script>
 </body>
 </html>
+
