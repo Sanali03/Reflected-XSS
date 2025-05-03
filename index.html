@@ -1,42 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reflected XSS</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
-        h1 { color: #444; }
-        input, textarea { padding: 8px; margin-top: 10px; width: 400px; height: 60px; font-size: 16px; }
-        button { padding: 10px 20px; margin-top: 10px; }
-        #output { margin-top: 20px; font-size: 18px; background: #fff; padding: 10px; border: 1px solid #ccc; }
-    </style>
+  <title>Reflected XSS</title>
+  <style>
+    body { font-family: sans-serif; padding: 40px; background: #f4f4f4; }
+    textarea { width: 100%; height: 60px; font-size: 16px; margin-bottom: 10px; }
+    button { padding: 8px 16px; font-size: 16px; }
+    #output { margin-top: 20px; background: #fff; padding: 10px; border: 1px solid #ccc; }
+  </style>
 </head>
 <body>
-    <h1>Reflected XSS</h1>
-    <form id="xssForm">
-        <textarea id="inputField" placeholder="<script>alertFlag()</script>"></textarea><br>
-        <button type="submit">Submit</button>
-    </form>
 
-    <div id="output"></div>
+  <h2>Reflected XSS</h2>
+  <form id="form">
+    <textarea id="input" placeholder="Enter your payload here..."></textarea><br>
+    <button type="submit">Submit</button>
+  </form>
 
-    <script>
-        // Define the function that the attacker must call
-        function alertFlag() {
-            alert("THM{GitHub_Reflected_XSS_Flag}");
-        }
+  <div id="output"></div>
 
-        document.getElementById("xssForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const input = document.getElementById("inputField").value;
+  <script>
+    function alertFlag() {
+      alert("THM{Reflected_XSS_Flag}");
+    }
 
-            // Reflect input into DOM unsafely
-            const container = document.getElementById("output");
-            container.innerHTML = input;  // XSS vulnerability
+    document.getElementById("form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const val = document.getElementById("input").value;
+      document.getElementById("output").innerHTML = val;
+    });
+  </script>
 
-            // Let the browser render and possibly execute it
-            // (GitHub Pages blocks inline <script>, but this works if injected as HTML + function is defined above)
-        });
-    </script>
 </body>
 </html>
-
