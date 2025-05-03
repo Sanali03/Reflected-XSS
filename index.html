@@ -4,33 +4,37 @@
     <title>Reflected XSS</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
-        h1 { color:#444; }
-        input { padding: 8px; margin-right: 10px; width: 300px; }
-        #output { margin-top: 20px; font-size: 18px; }
+        h1 { color: #444; }
+        input, textarea { padding: 8px; margin-top: 10px; width: 400px; height: 60px; font-size: 16px; }
+        button { padding: 10px 20px; margin-top: 10px; }
+        #output { margin-top: 20px; font-size: 18px; background: #fff; padding: 10px; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
     <h1>Reflected XSS</h1>
     <form id="xssForm">
-        <input type="text" id="inputField" placeholder="<script>window.xssTriggered=true</script>" />
-        <input type="submit" value="Submit" />
+        <textarea id="inputField" placeholder="<script>alertFlag()</script>"></textarea><br>
+        <button type="submit">Submit</button>
     </form>
-    <p id="output"></p>
+
+    <div id="output"></div>
 
     <script>
+        // Define the function that the attacker must call
+        function alertFlag() {
+            alert("THM{GitHub_Reflected_XSS_Flag}");
+        }
+
         document.getElementById("xssForm").addEventListener("submit", function(e) {
             e.preventDefault();
             const input = document.getElementById("inputField").value;
-            console.log("User input:", input);
-            document.getElementById("output").innerHTML = input;
 
-            setTimeout(() => {
-                if (window.xssTriggered) {
-                    alert("THM{Reflected_XSS_Flag}");
-                } else {
-                    console.log("No flag triggered.");
-                }
-            }, 100);
+            // Reflect input into DOM unsafely
+            const container = document.getElementById("output");
+            container.innerHTML = input;  // XSS vulnerability
+
+            // Let the browser render and possibly execute it
+            // (GitHub Pages blocks inline <script>, but this works if injected as HTML + function is defined above)
         });
     </script>
 </body>
