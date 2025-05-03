@@ -29,4 +29,35 @@
         }
     </script>
 </body>
+</html><!DOCTYPE html>
+<html>
+<head>
+    <title>Reflected XSS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
+        h1 { color:#444; }
+        input { padding: 8px; margin-right: 10px; }
+        #output { margin-top: 20px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <h1>Reflected XSS</h1>
+    <form method="GET">
+        <input type="text" name="q" placeholder="Type something..." />
+        <input type="submit" value="Search" />
+    </form>
+    <p id="output"></p>
+
+    <script>
+        const q = new URLSearchParams(window.location.search).get("q");
+        if (q) {
+            document.getElementById("output").innerHTML = q;
+        }
+
+        if (window.xssTriggered) {
+            const flag = "THM{Reflected_XSS_Flag}";
+            console.log("✅ Reflected XSS Success! Flag: " + flag);
+        }
+    </script>
+</body>
 </html>
