@@ -5,59 +5,60 @@
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
         h1 { color:#444; }
-        input { padding: 8px; margin-right: 10px; }
+        input { padding: 8px; margin-right: 10px; width: 300px; }
         #output { margin-top: 20px; font-size: 18px; }
     </style>
 </head>
 <body>
     <h1>Reflected XSS</h1>
-    <form method="GET">
-        <input type="text" name="q" placeholder="Type something..." />
-        <input type="submit" value="Search" />
+    <form id="xssForm">
+        <input type="text" id="inputField" placeholder="Enter your script here..." />
+        <input type="submit" value="Submit" />
     </form>
     <p id="output"></p>
 
     <script>
-        const q = new URLSearchParams(window.location.search).get("q");
-        if (q) {
-            document.getElementById("output").innerHTML = q;
-        }
+        document.getElementById("xssForm").addEventListener("submit", function(e) {
+            e.preventDefault();
 
-        if (window.xssTriggered) {
-            const flag = "THM{Reflected_XSS_Flag}";
-            console.log("✅ Reflected XSS Success! Flag: " + flag);
-        }
-    </script>
-</body>
-</html><!DOCTYPE html>
+            const input = document.getElementById("inputField").value;
+
+            // Reflect the input into the page (vulnerable part)
+            document.getElementById("output").innerHTML = input;
+YPE html>
 <html>
 <head>
     <title>Reflected XSS</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
         h1 { color:#444; }
-        input { padding: 8px; margin-right: 10px; }
+        input { padding: 8px; margin-right: 10px; width: 300px; }
         #output { margin-top: 20px; font-size: 18px; }
     </style>
 </head>
 <body>
     <h1>Reflected XSS</h1>
-    <form method="GET">
-        <input type="text" name="q" placeholder="Type something..." />
-        <input type="submit" value="Search" />
+    <form id="xssForm">
+        <input type="text" id="inputField" placeholder="Enter your script here..." />
+        <input type="submit" value="Submit" />
     </form>
     <p id="output"></p>
 
     <script>
-        const q = new URLSearchParams(window.location.search).get("q");
-        if (q) {
-            document.getElementById("output").innerHTML = q;
-        }
+        document.getElementById("xssForm").addEventListener("submit", function(e) {
+            e.preventDefault();
 
-        if (window.xssTriggered) {
-            const flag = "THM{Reflected_XSS_Flag}";
-            console.log("✅ Reflected XSS Success! Flag: " + flag);
-        }
+            const input = document.getElementById("inputField").value;
+
+            // Reflect the input into the page (vulnerable part)
+            document.getElementById("output").innerHTML = input;
+            // After rendering the input, check if it triggers the flag
+            setTimeout(() => {
+                if (window.xssTriggered) {
+                    alert("THM{Reflected_XSS_Flag}");
+                }
+            }, 100); // short delay to allow script execution
+        });
     </script>
 </body>
 </html>
