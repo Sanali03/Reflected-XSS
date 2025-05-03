@@ -3,45 +3,36 @@
 <head>
   <title>Reflected XSS</title>
   <style>
-    body { font-family: sans-serif; padding: 40px; background: #f4f4f4; }
-    textarea { width: 100%; height: 60px; font-size: 16px; margin-bottom: 10px; }
-    button { padding: 8px 16px; font-size: 16px; }
+    body { font-family: sans-serif; padding: 40px; background: #f0f0f0; }
+    textarea { width: 100%; height: 60px; font-size: 16px; }
+    button { margin-top: 10px; padding: 8px 16px; font-size: 16px; }
     #output { margin-top: 20px; background: #fff; padding: 10px; border: 1px solid #ccc; }
   </style>
 </head>
 <body>
 
-  <h2>Reflected XSS</h2>
+  <h2>Reflected XSS Demo</h2>
   <form id="form">
-    <textarea id="input" placeholder="Enter a script like: <script>alertFlag()</script>"></textarea><br>
-    <button type="submit">Submit</button>
+    <textarea id="input" placeholder="Type: alertFlag()"></textarea><br>
+    <button type="submit">Run</button>
   </form>
 
   <div id="output"></div>
 
   <script>
-    // Predefined function to simulate flag reveal
     function alertFlag() {
       alert("THM{Reflected_XSS_Flag}");
     }
 
-    document.getElementById("form").addEventListener("submit", function(e) {
+    document.getElementById("form").onsubmit = function(e) {
       e.preventDefault();
+      const val = document.getElementById("input").value.trim();
+      document.getElementById("output").textContent = val;
 
-      const input = document.getElementById("input").value;
-      const output = document.getElementById("output");
-
-      // Display raw input for realism
-      output.textContent = input;
-
-      // Detect script injection pattern
-      const match = input.match(/<script>(.*?)<\/script>/i);
-      if (match && match[1].includes("alertFlag()")) {
-        const script = document.createElement("script");
-        script.innerHTML = match[1];
-        document.body.appendChild(script);
+      if (val === "alertFlag()") {
+        alertFlag();
       }
-    });
+    };
   </script>
 
 </body>
